@@ -33,6 +33,10 @@ func WriterToFiles(f io.Reader) ([]string, error) {
 			return result, err
 		}
 		result = append(result, s)
+		err = file.Close()
+		if err != nil {
+			return nil, err
+		}
 		buffer = bytes.NewBufferString("")
 	}
 	return result, err
