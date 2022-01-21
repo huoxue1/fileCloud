@@ -1,18 +1,22 @@
 package main
 
 import (
-	"fmt"
+	"net/http"
+	_ "net/http/pprof"
 
 	log "github.com/sirupsen/logrus"
 
 	"github.com/huoxue1/filecloud/config"
 	"github.com/huoxue1/filecloud/model"
-	_ "github.com/huoxue1/filecloud/model"
 	"github.com/huoxue1/filecloud/router" //nolint:gci
 	"github.com/huoxue1/filecloud/utils"
 )
 
 func main() {
+	go func() {
+		log.Println(http.ListenAndServe("localhost:6060", nil))
+	}()
+
 	config.CheckConfigFile("config.yml")
 
 	err := config.LoadConfig("config.yml")
@@ -25,7 +29,8 @@ func main() {
 	model.Init()
 	model.InitRoot()
 	engine := router.Router()
-	if err := engine.Run(fmt.Sprintf("%s:%d", config.GetConfig().Address, config.GetConfig().Port)); err != nil {
-		log.Panicln(err.Error())
-	}
+	http.ListenAndServe("0.0.0.0:8081", engine)
+	//if err := engine.Run(fmt.Sprintf("%s:%d", config.GetConfig().Address, config.GetConfig().Port)); err != nil {
+	//	log.Panicln(err.Error())
+	//}
 }

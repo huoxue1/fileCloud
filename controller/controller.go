@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"mime/multipart"
 	"net/http"
 	"os"
 	"time"
@@ -144,6 +145,9 @@ func Upload() gin.HandlerFunc {
 		}
 		parentID := context.Query("parent_id")
 		f, err := file.Open()
+		defer func(f multipart.File) {
+			_ = f.Close()
+		}(f)
 		if err != nil {
 			context.JSON(200, fail("open the file error", err.Error()))
 			return
