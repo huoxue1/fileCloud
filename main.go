@@ -1,8 +1,7 @@
 package main
 
 import (
-	"net/http"
-	_ "net/http/pprof"
+	"fmt"
 
 	log "github.com/sirupsen/logrus"
 
@@ -13,10 +12,6 @@ import (
 )
 
 func main() {
-	go func() {
-		log.Println(http.ListenAndServe("localhost:6060", nil))
-	}()
-
 	config.CheckConfigFile("config.yml")
 
 	err := config.LoadConfig("config.yml")
@@ -29,8 +24,7 @@ func main() {
 	model.Init()
 	model.InitRoot()
 	engine := router.Router()
-	http.ListenAndServe("0.0.0.0:8081", engine)
-	//if err := engine.Run(fmt.Sprintf("%s:%d", config.GetConfig().Address, config.GetConfig().Port)); err != nil {
-	//	log.Panicln(err.Error())
-	//}
+	if err := engine.Run(fmt.Sprintf("%s:%d", config.GetConfig().Address, config.GetConfig().Port)); err != nil {
+		log.Panicln(err.Error())
+	}
 }

@@ -12,7 +12,7 @@ import (
 )
 
 func Router() *gin.Engine {
-	engine := gin.New()
+	engine := gin.Default()
 
 	engine.Use(cors())
 
