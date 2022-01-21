@@ -16,15 +16,15 @@ builds:
     goarch:
       - 386
       - amd64
-#      - arm
-#      - arm64
-#    goarm:
-#      - 7
-#    ignore:
-#      - goos: darwin
-#        goarch: arm
-#      - goos: darwin
-#        goarch: 386
+      - arm
+      - arm64
+    goarm:
+      - 7
+    ignore:
+      - goos: darwin
+        goarch: arm
+      - goos: darwin
+        goarch: 386
     mod_timestamp: "{{ .CommitTimestamp }}"
     flags:
       - -trimpath
