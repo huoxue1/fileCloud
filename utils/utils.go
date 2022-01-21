@@ -4,6 +4,7 @@ import (
 	"crypto/md5"
 	"encoding/hex"
 	"io"
+	"os"
 	"reflect"
 	"unsafe"
 )
@@ -21,6 +22,28 @@ func StringToBytes(s string) (b []byte) {
 	bh.Len = sh.Len
 	bh.Cap = sh.Len
 	return b
+}
+
+func CheckFile(path string) {
+	_, err := os.Stat(path)
+	if err != nil {
+		_, err := os.Create(path)
+		if err != nil {
+			return
+		}
+		return
+	}
+}
+
+func CheckDir(path string) {
+	_, err := os.Stat(path)
+	if err != nil {
+		err := os.Mkdir(path, 0666)
+		if err != nil {
+			return
+		}
+		return
+	}
 }
 
 // GetFileMd5 获取文件的md5码

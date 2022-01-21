@@ -8,12 +8,19 @@ import (
 	"github.com/gin-gonic/gin"
 
 	"github.com/huoxue1/filecloud/controller"
+	"github.com/huoxue1/filecloud/view/filecloud"
 )
 
 func Router() *gin.Engine {
 	engine := gin.New()
 
 	engine.Use(cors())
+
+	engine.GET("/", func(context *gin.Context) {
+		context.Redirect(301, "/static/dist/default.html")
+	})
+
+	engine.StaticFS("/static", http.FS(filecloud.Dist))
 
 	engine.GET("/files", controller.GetFilesFromPath())
 	engine.GET("/root", controller.GetRoot())
@@ -37,7 +44,7 @@ func cors() gin.HandlerFunc {
 		method := c.Request.Method               //请求方法
 		origin := c.Request.Header.Get("Origin") //请求头部
 		var headerKeys []string                  // 声明请求头keys
-		for k, _ := range c.Request.Header {
+		for k := range c.Request.Header {
 			headerKeys = append(headerKeys, k)
 		}
 		headerStr := strings.Join(headerKeys, ", ")

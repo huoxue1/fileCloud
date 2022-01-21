@@ -7,7 +7,9 @@ create table file
     is_dir    integer default 0,
     content   blob,
     upload_time INTEGER,
-    parent_id TEXT default ''
+    parent_id TEXT default '',
+    md5 TEXT,
+    size INTEGER default 0
 );
 
 create unique index file_id_uindex
