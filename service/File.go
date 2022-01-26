@@ -21,7 +21,8 @@ func WriterToFiles(f io.Reader) ([]string, error) {
 	var result []string
 	getConfig := config.GetConfig()
 	var err error
-	for {
+	i := 0
+	for i == 0 {
 		s := uuid.New().String()
 		file, err := os.OpenFile(fmt.Sprintf("%v/%v", getConfig.StoragePath, s), os.O_CREATE|os.O_RDWR, 0666)
 		if err != nil {
@@ -30,7 +31,7 @@ func WriterToFiles(f io.Reader) ([]string, error) {
 		_, err = io.CopyN(file, f, 4<<20)
 		if err != nil && err.Error() == "EOF" {
 			err = nil
-			break
+			i = 1
 		}
 		result = append(result, s)
 		err = file.Close()
